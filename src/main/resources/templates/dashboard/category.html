@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{dashboard/layout-admin}"
+>
+
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Category</h1>
+                <form action="/dash-board/categories" method="post" th:object="${item}">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="mb-3">
+                        <label for="idCategory" class="form-label">Id</label>
+                        <input type="text" class="form-control" id="idCategory" disabled th:field="*{id}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nameCategory" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="nameCategory" placeholder="Name of Category..." th:field="*{name}">
+                    </div>
+                    <button type="submit" formaction="/dash-board/categories/create" class="btn btn-primary">Create</button>
+                    <button type="submit" formaction="/dash-board/categories/update" class="btn btn-secondary">Update</button>
+                    <a class="btn btn-success" href="/dash-board/categories">Reset</a>
+                    <a class="btn btn-danger" th:href="@{'/dash-board/categories/delete/' + ${item.id}}" >Delete</a>
+                </form>
+
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Utilities</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${items}">
+                        <td th:text="${item.id}"></td>
+                        <td th:text="${item.name}"></td>
+                        <td>
+                            <a th:href="@{'/dash-board/categories/edit/' + ${item.id}}">Edit</a>
+                            <a th:href="@{'/dash-board/categories/delete/' + ${item.id}}" >Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

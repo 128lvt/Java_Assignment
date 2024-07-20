@@ -1,0 +1,22 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;DatabaseName=PS34827_JAVA5;encrypt=true;trustServerCertificate=true;
+    username: sa
+    password: sa123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
