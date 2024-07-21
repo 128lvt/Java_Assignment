@@ -1,11 +1,11 @@
 package com.example.assignment01.controllers;
 
-import com.example.assignment01.model.Item;
-import com.example.assignment01.model.User;
-import com.example.assignment01.security.UserPrincipal;
-import com.example.assignment01.service.CartService;
-import com.example.assignment01.service.OrderService;
-import com.example.assignment01.service.UserService;
+import com.example.assignment01.models.Item;
+import com.example.assignment01.models.User;
+import com.example.assignment01.securities.UserPrincipal;
+import com.example.assignment01.services.CartService;
+import com.example.assignment01.services.OrderService;
+import com.example.assignment01.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

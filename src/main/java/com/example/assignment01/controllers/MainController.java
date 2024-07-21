@@ -1,11 +1,11 @@
 package com.example.assignment01.controllers;
 
-import com.example.assignment01.model.Category;
-import com.example.assignment01.model.Product;
-import com.example.assignment01.model.User;
-import com.example.assignment01.service.CategoryService;
-import com.example.assignment01.service.ProductService;
-import com.example.assignment01.service.UserService;
+import com.example.assignment01.models.Category;
+import com.example.assignment01.models.Product;
+import com.example.assignment01.models.User;
+import com.example.assignment01.services.CategoryService;
+import com.example.assignment01.services.ProductService;
+import com.example.assignment01.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -110,7 +110,7 @@ public class MainController {
         user.setCreate(new Date());
         user.setEnabled(true);
         user.setRoles(false);
-        this.userService.save(user);
+        userService.save(user);
         return "redirect:/login";
     }
 }

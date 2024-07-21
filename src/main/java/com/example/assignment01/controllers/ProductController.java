@@ -1,12 +1,12 @@
 package com.example.assignment01.controllers;
 
-import com.example.assignment01.model.Category;
-import com.example.assignment01.model.Product;
-import com.example.assignment01.model.ProductImage;
-import com.example.assignment01.service.CategoryService;
-import com.example.assignment01.service.ProductImageService;
-import com.example.assignment01.service.ProductService;
-import com.example.assignment01.system.ObjectNotFoundException;
+import com.example.assignment01.models.Category;
+import com.example.assignment01.models.Product;
+import com.example.assignment01.models.ProductImage;
+import com.example.assignment01.services.CategoryService;
+import com.example.assignment01.services.ProductImageService;
+import com.example.assignment01.services.ProductService;
+import com.example.assignment01.systems.ObjectNotFoundException;
 import com.example.assignment01.utilities.FileUploader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

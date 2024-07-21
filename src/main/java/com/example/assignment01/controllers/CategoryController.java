@@ -1,9 +1,9 @@
 package com.example.assignment01.controllers;
 
 
-import com.example.assignment01.model.Category;
-import com.example.assignment01.service.CategoryService;
-import com.example.assignment01.system.ObjectNotFoundException;
+import com.example.assignment01.models.Category;
+import com.example.assignment01.services.CategoryService;
+import com.example.assignment01.systems.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
