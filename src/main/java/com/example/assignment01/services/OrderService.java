@@ -7,6 +7,7 @@ import com.example.assignment01.models.User;
 import com.example.assignment01.repositories.OrderDetailRepository;
 import com.example.assignment01.repositories.OrderRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,32 +18,24 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderDetailRepository orderDetailRepository;
     private final ProductService productService;
 
-
-    @Autowired
-    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ProductService productService) {
-        this.orderRepository = orderRepository;
-        this.orderDetailRepository = orderDetailRepository;
-        this.productService = productService;
-    }
-
-    public Order createOrder(User user, List<Integer> productIds, List<Integer> quantities) {
+    public void createOrder(User user, List<Integer> productIds, List<Integer> quantities) {
         Order order = new Order();
         order.setOrderDate(new Date());
         order.setUser(user);
         order.setOrderDetails(new ArrayList<>());
 
-        double totalMoney = 0;
+        float totalMoney = 0;
 
         for (int i = 0; i < productIds.size(); i++) {
             Product product = this.productService.findById(productIds.get(i));
             Integer qty = quantities.get(i);
-            double price = product.getPrice();
+            float price = product.getPrice();
 
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setProduct(product);
@@ -55,6 +48,5 @@ public class OrderService {
         }
         order.setTotalMoney(totalMoney);
         this.orderRepository.save(order);
-        return order;
     }
 }

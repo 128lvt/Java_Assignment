@@ -47,13 +47,12 @@ public class UserService implements UserDetailsService {
     public User update(Integer userId, User updateUser) {
         return this.userRepository.findById(userId)
                 .map(oldUser -> {
-                    oldUser.setFullname(updateUser.getFullname());
+                    oldUser.setFullName(updateUser.getFullName());
                     oldUser.setAddress(updateUser.getAddress());
                     oldUser.setEnabled(updateUser.isEnabled());
                     oldUser.setUpdate(new Date());
                     oldUser.setPhoneNumber(updateUser.getPhoneNumber());
-                    User updatedUser = this.userRepository.save(oldUser);
-                    return updatedUser;
+                    return this.userRepository.save(oldUser);
                 })
                 .orElseThrow(() -> new ObjectNotFoundException("user", userId));
 

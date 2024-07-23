@@ -38,13 +38,15 @@ public class CartController {
     public String checkout(@AuthenticationPrincipal UserPrincipal userPrincipal, Model model) {
 
         if (userPrincipal != null) {
-            String fullname = userPrincipal.getFullName();
+            String fullName = userPrincipal.getFullName();
             String address = userPrincipal.getAddress();
             String phoneNumber = userPrincipal.getPhoneNumber();
+            String username = userPrincipal.getUsername();
             User userInfo = new User();
-            userInfo.setFullname(fullname);
+            userInfo.setFullName(fullName);
             userInfo.setAddress(address);
             userInfo.setPhoneNumber(phoneNumber);
+            userInfo.setUsername(username);
             model.addAttribute("userInfo", userInfo);
         } else {
             model.addAttribute("userInfo", new User());
@@ -102,5 +104,4 @@ public class CartController {
         session.removeAttribute("cart");
         this.cartService.clear();
     }
-
 }

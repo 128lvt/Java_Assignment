@@ -21,8 +21,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/dash-board/products")
 public class ProductController {
-
-
     private final ProductService productService;
     private final CategoryService categoryService;
     private final ProductImageService productImageService;
@@ -91,7 +89,7 @@ public class ProductController {
             model.addAttribute("item", editProduct);
             redirectAttributes.addFlashAttribute("message", "The user has been saved successfully");
             return "dashboard/product_form";
-        } catch (ObjectNotFoundException exception){
+        } catch (ObjectNotFoundException exception) {
             exception.printStackTrace();
         }
         return "redirect:/dash-board/products";

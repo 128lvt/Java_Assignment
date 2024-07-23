@@ -19,7 +19,7 @@ public class Order {
     private Date orderDate;
 
     @Column(name = "total_money")
-    private Double totalMoney;
+    private Float totalMoney;
 
     @ManyToOne
     private User user;

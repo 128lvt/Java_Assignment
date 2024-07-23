@@ -41,7 +41,7 @@ public class MainController {
     public String showIndex(Model model) {
         Pageable pageable = PageRequest.of(0, 8);
         Page<Product> page = this.productService.getAllProducts(pageable);
-        model.addAttribute("productPage", page);
+        model.addAttribute("productPage", page.getContent());
         return "index";
     }
 
@@ -70,12 +70,6 @@ public class MainController {
         return "shop";
     }
 
-//    @GetMapping("/shopping-cart")
-//    public String showCartPage() {
-//
-//        return "shopping-cart";
-//    }
-
     @GetMapping("/shop-details")
     public String showShopDetailsPage(@RequestParam int productId, Model model) {
         Product product = productService.findById((Integer) productId);
@@ -102,6 +96,11 @@ public class MainController {
     public String showRegister(Model model) {
         model.addAttribute("user", new User());
         return "register";
+    }
+
+    @GetMapping("/contact")
+    public String showContactPage() {
+        return "contact";
     }
 
     @PostMapping("/register/save")

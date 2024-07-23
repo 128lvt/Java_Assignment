@@ -52,7 +52,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     public String getFullName() {
-        return user.getFullname();
+        return user.getFullName();
     }
 
     public String getPhoneNumber() {

@@ -14,7 +14,7 @@ public class OrderDetail {
     @Column(name = "number_of_product")
     private Integer qty;
 
-    private Double price;
+    private Float price;
 
     @ManyToOne
     private Order order;

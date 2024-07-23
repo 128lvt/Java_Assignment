@@ -15,13 +15,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String fullname;
+    @Column(name = "fullname", length = 100)
+    private String fullName;
 
     @Column(name = "phone_number")
     private String phoneNumber;
 
     private String address;
 
+    @Column(length = 100)
     private String password;
 
     @Temporal(TemporalType.DATE)
@@ -42,6 +44,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Order> orders = new ArrayList<>();
-
-
 }

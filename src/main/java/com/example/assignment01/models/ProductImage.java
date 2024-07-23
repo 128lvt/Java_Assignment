@@ -5,13 +5,13 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "product_image")
+@Table(name = "product_img")
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "product_img")
+    @Column(name = "img_url")
     private String url;
 
     @ManyToOne
