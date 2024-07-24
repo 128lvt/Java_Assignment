@@ -1,5 +1,6 @@
 package com.example.assignment01.controllers;
 
+import com.example.assignment01.dtos.ProductDTO;
 import com.example.assignment01.models.Product;
 import com.example.assignment01.responses.ProductResponse;
 import com.example.assignment01.services.ProductImageService;
@@ -25,7 +26,7 @@ public class ProductRestController {
     private final ProductImageService productImageService;
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@Valid @RequestBody Product product, BindingResult bindingResult) {
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
                 List<String> errorMessage = bindingResult.getFieldErrors()
@@ -34,7 +35,7 @@ public class ProductRestController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessage);
             }
-            return ResponseEntity.ok("Successfully created a product " + product);
+            return ResponseEntity.ok("Successfully created a product " + productService.createProduct(productDTO));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -54,17 +55,23 @@ public class ProductRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") int id) {
-        return ResponseEntity.ok("Successfully retrieved product with id " + id);
+        try {
+            ProductResponse productResponse = productService.getProduct(id);
+            return ResponseEntity.ok(productResponse);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @Valid @RequestBody Product product) {
-        return ResponseEntity.ok("Successfully updated product with id " + id);
+    public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @Valid @RequestBody ProductDTO productDTO) {
+        return ResponseEntity.ok(productService.updateProduct(id, productDTO));
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteProduct(@Valid @RequestBody Product product) {
-        return ResponseEntity.ok("Successfully deleted a product");
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") int id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.ok("Successfully deleted a product with id: " + id);
     }
 
 }

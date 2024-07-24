@@ -23,6 +23,8 @@ public class ProductResponse {
 
     private Date createDate;
 
+    private Date updateDate;
+
     private CategoryResponse category;
 
     private List<ImageResponse> images;

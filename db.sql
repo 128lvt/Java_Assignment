@@ -80,7 +80,7 @@ ADD
 ALTER TABLE
     product_img
 ADD
-    CONSTRAINT FKproduct_im53257 FOREIGN KEY (product_id) REFERENCES products (id);
+    CONSTRAINT FKproduct_im53257 FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE;
 
 INSERT INTO
     Categories (name)
