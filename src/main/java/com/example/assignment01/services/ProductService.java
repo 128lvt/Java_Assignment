@@ -42,8 +42,7 @@ public class ProductService {
                     oldProduct.setDescription(updateProduct.getDescription());
                     oldProduct.setPrice(updateProduct.getPrice());
                     oldProduct.setUpdateDate(new Date());
-                    Product updatedProduct = this.productRepository.save(oldProduct);
-                    return updatedProduct;
+                    return this.productRepository.save(oldProduct);
                 })
                 .orElseThrow(() -> new ObjectNotFoundException("product", productId));
     }

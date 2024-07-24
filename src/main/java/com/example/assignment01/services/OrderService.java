@@ -4,11 +4,9 @@ import com.example.assignment01.models.Order;
 import com.example.assignment01.models.OrderDetail;
 import com.example.assignment01.models.Product;
 import com.example.assignment01.models.User;
-import com.example.assignment01.repositories.OrderDetailRepository;
 import com.example.assignment01.repositories.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

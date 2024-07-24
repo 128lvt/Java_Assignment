@@ -1,15 +1,19 @@
 package com.example.assignment01.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "products")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,4 +49,5 @@ public class Product {
                 });
         this.productImages = new ArrayList<>();
     }
+
 }

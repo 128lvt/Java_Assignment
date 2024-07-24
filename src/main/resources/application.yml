@@ -20,3 +20,5 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.SQLServer2012Dialect
+api:
+  prefix: api/v1

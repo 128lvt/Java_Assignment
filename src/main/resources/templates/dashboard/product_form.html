@@ -1,65 +1,103 @@
 <!DOCTYPE html>
 <html
-        lang="en"
-        xmlns:th="http://thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{dashboard/layout-admin}"
+  lang="en"
+  xmlns:th="http://thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{dashboard/layout-admin}"
 >
-<body layout:fragment="content">
+  <body layout:fragment="content">
     <div class="container mt-3">
-        <div th:if="${message}" class="alert alert-success text-center">
-            [[${message}]]
+      <div th:if="${message}" class="alert alert-success text-center">
+        [[${message}]]
+      </div>
+
+      <form
+        th:object="${item}"
+        style="max-width: 1000px; margin: 0 auto"
+        th:action="@{/dash-board/products/save}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <input type="hidden" th:field="*{id}" />
+        <!-- Tên product -->
+        <div class="form-group mb-3">
+          <label for="productName">Tên sản phẩm</label>
+          <input
+            type="text"
+            id="productName"
+            class="form-control"
+            placeholder="Nhập tên sản phẩm"
+            th:field="*{name}"
+          />
         </div>
 
-        <form th:object="${item}" style="max-width: 1000px; margin: 0 auto" th:action="@{/dash-board/products/save}" method="post" enctype="multipart/form-data">
-            <input type="hidden" th:field="*{id}">
-            <!-- Tên product -->
-            <div class="form-group mb-3">
-                <label for="productName">Tên sản phẩm</label>
-                <input type="text" id="productName" class="form-control" placeholder="Nhập tên sản phẩm" th:field="*{name}">
-            </div>
+        <!-- Type product với select option -->
+        <div class="form-group mb-3">
+          <label for="productType">Loại sản phẩm</label>
+          <select
+            id="productType"
+            class="form-select"
+            aria-label="Default select example"
+            th:field="*{category.id}"
+          >
+            <th:block th:if="${categories != null}">
+              <th:block th:each="category: ${categories}">
+                <option th:value="${category.id}">[[${category.name}]]</option>
+              </th:block>
+            </th:block>
+            <th:block th:unless="${categories != null}">
+              <option th:value="${item.category.id}">
+                [[${item.category.name}]]
+              </option>
+            </th:block>
+          </select>
+        </div>
 
-            <!-- Type product với select option -->
-            <div class="form-group mb-3">
-                <label for="productType">Loại sản phẩm</label>
-                <select id="productType" class="form-select" aria-label="Default select example" th:field="*{category.id}">
-                    <th:block th:if="${categories != null}">
-                        <th:block th:each="category: ${categories}">
-                            <option th:value="${category.id}">[[${category.name}]]</option>
-                        </th:block>
-                    </th:block>
-                    <th:block th:unless="${categories != null}">
-                        <option th:value="${item.category.id}">[[${item.category.name}]]</option>
-                    </th:block>
-                </select>
-            </div>
+        <!-- Description product -->
+        <div class="form-group mb-3">
+          <label for="productDesc">Mô tả sản phẩm</label>
+          <textarea
+            id="productDesc"
+            class="form-control"
+            rows="3"
+            placeholder="Nhập mô tả sản phẩm"
+            th:field="*{description}"
+          ></textarea>
+        </div>
 
-            <!-- Description product -->
-            <div class="form-group mb-3">
-                <label for="productDesc">Mô tả sản phẩm</label>
-                <textarea id="productDesc" class="form-control" rows="3" placeholder="Nhập mô tả sản phẩm" th:field="*{description}"></textarea>
-            </div>
+        <!-- Price product -->
+        <div class="form-group mb-3">
+          <label for="productPrice">Giá sản phẩm</label>
+          <input
+            type="text"
+            id="productPrice"
+            class="form-control"
+            placeholder="Nhập giá sản phẩm"
+            th:field="*{price}"
+          />
+        </div>
 
-            <!-- Price product -->
-            <div class="form-group mb-3">
-                <label for="productPrice">Giá sản phẩm</label>
-                <input type="text" id="productPrice" class="form-control" placeholder="Nhập giá sản phẩm" th:field="*{price}">
-            </div>
+        <div class="mb-3">
+          <label for="formFileMultiple" class="form-label"
+            >Chọn ảnh sản phẩm</label
+          >
+          <input
+            class="form-control"
+            type="file"
+            id="formFileMultiple"
+            name="file"
+            multiple
+          />
+        </div>
 
-            <div class="mb-3">
-                <label for="formFileMultiple" class="form-label">Chọn ảnh sản phẩm</label>
-                <input class="form-control" type="file" id="formFileMultiple" name="file" multiple>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
     </div>
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>

@@ -49,8 +49,9 @@
                     <div class="header__top__right">
                         <div class="header__top__links">
                             <a th:href="@{/login}" sec:authorize="isAnonymous()">Sign in</a>
+                            <a href="#" sec:authorize="isAuthenticated()"
+                               th:text="${#authentication.principal.fullName}"></a>
                             <a th:href="@{/logout}" sec:authorize="isAuthenticated()">Log Out</a>
-                            <a href="#">FAQs</a>
                         </div>
                     </div>
                 </div>

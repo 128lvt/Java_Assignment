@@ -8,6 +8,7 @@ import com.example.assignment01.services.ProductImageService;
 import com.example.assignment01.services.ProductService;
 import com.example.assignment01.systems.ObjectNotFoundException;
 import com.example.assignment01.utilities.FileUploader;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +21,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/dash-board/products")
+@RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final ProductImageService productImageService;
-
-    public ProductController(ProductService productService, CategoryService categoryService, ProductImageService productImageService) {
-        this.productService = productService;
-        this.categoryService = categoryService;
-        this.productImageService = productImageService;
-    }
 
     @GetMapping
     public String showProduct(Model model) {
