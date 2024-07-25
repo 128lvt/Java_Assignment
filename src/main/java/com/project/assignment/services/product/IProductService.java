@@ -5,19 +5,20 @@ import com.project.assignment.dtos.ProductImageDTO;
 import com.project.assignment.models.Product;
 import com.project.assignment.models.ProductImage;
 import com.project.assignment.responses.ProductResponse;
+import com.project.assignment.systems.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 public interface IProductService {
-    Product createProduct(ProductDTO productDTO);
+    Product createProduct(ProductDTO productDTO) throws NotFoundException;
 
-    ProductImage createProductImage(int productId, ProductImageDTO productImageDTO);
+/*    ProductImage createProductImage(int productId, ProductImageDTO productImageDTO);*/
 
     Page<Product> getAllProducts(PageRequest pageRequest);
 
-    ProductResponse getProduct(int id);
+    ProductResponse getProduct(int id) throws NotFoundException;
 
-    ProductResponse updateProduct(int id, ProductDTO productDTO);
+    ProductResponse updateProduct(int id, ProductDTO productDTO) throws NotFoundException;
 
     void deleteProduct(int id);
 }

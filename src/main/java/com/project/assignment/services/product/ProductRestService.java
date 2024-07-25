@@ -11,6 +11,7 @@ import com.project.assignment.repositories.ProductRepository;
 import com.project.assignment.responses.CategoryResponse;
 import com.project.assignment.responses.ImageResponse;
 import com.project.assignment.responses.ProductResponse;
+import com.project.assignment.systems.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +29,8 @@ public class ProductRestService implements IProductService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Product createProduct(ProductDTO productDTO) {
-        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
+    public Product createProduct(ProductDTO productDTO) throws NotFoundException {
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new NotFoundException("Category not found"));
         Product product = Product
                 .builder()
                 .name(productDTO.getName())
@@ -41,7 +42,7 @@ public class ProductRestService implements IProductService {
         return productRepository.save(product);
     }
 
-    @Override
+    /*@Override
     public ProductImage createProductImage(int productId, ProductImageDTO productImageDTO) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
         ProductImage productImage = ProductImage
@@ -54,7 +55,7 @@ public class ProductRestService implements IProductService {
             throw new RuntimeException("Maximum image per product exceeded");
         }
         return productImageRepository.save(productImage);
-    }
+    }*/
 
     @Override
     public Page<Product> getAllProducts(PageRequest pageRequest) {
@@ -119,8 +120,8 @@ public class ProductRestService implements IProductService {
 
 
     @Override
-    public ProductResponse getProduct(int id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+    public ProductResponse getProduct(int id) throws NotFoundException {
+        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
 
         /*return ProductResponse
                 .builder()
@@ -150,9 +151,9 @@ public class ProductRestService implements IProductService {
     }
 
     @Override
-    public ProductResponse updateProduct(int id, ProductDTO productDTO) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
+    public ProductResponse updateProduct(int id, ProductDTO productDTO) throws NotFoundException {
+        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new NotFoundException("Category not found"));
 
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
@@ -173,7 +174,7 @@ public class ProductRestService implements IProductService {
 
     @Override
     public void deleteProduct(int id) {
-        Product exsitedProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+/*        Product exsitedProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));*/
 //        exsitedProduct.removeAllImage();
         productRepository.deleteById(id);
     }

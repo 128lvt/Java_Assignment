@@ -8,8 +8,9 @@ import com.project.assignment.repositories.ProductImageRepository;
 import com.project.assignment.repositories.ProductRepository;
 import com.project.assignment.responses.ProductImageResponse;
 import com.project.assignment.responses.ProductResponse;
-import com.project.assignment.services.ProductImageService;
 import com.project.assignment.services.product.ProductRestService;
+import com.project.assignment.services.product_image.ProductImageRestService;
+import com.project.assignment.systems.NotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +33,7 @@ import static com.project.assignment.utilities.FileUploader.storeFile;
 @RequiredArgsConstructor
 public class ProductRestController {
     private final ProductRestService productService;
-    private final ProductImageService productImageService;
+    private final ProductImageRestService productImageRestService;
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
 
@@ -79,7 +80,7 @@ public class ProductRestController {
                     }
                     //Lưu file và cập nhật thumbnail trong DTO
                     String fileName = storeFile(file, "product_images");
-                    ProductImage productImage = productService.createProductImage(
+                    ProductImage productImage = productImageRestService.createProductImage(
                             product.getId(),
                             ProductImageDTO
                                     .builder()
@@ -99,17 +100,6 @@ public class ProductRestController {
         }
     }
 
-    @GetMapping("/images/{id}")
-    public ResponseEntity<?> getProductImage(@PathVariable("id") int id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        List<ProductImage> productImages = productImageRepository.findByProduct(product);
-        List<ProductImageResponse> productImageResponses = productImages
-                .stream()
-                .map(ProductImageResponse::of)
-                .toList();
-        return ResponseEntity.ok().body(productImageResponses);
-    }
-
     @GetMapping
     public ResponseEntity<?> getAllProducts(@RequestParam("page") int page) {
         int size = 12;
@@ -122,6 +112,12 @@ public class ProductRestController {
         return ResponseEntity.ok(productResponses);
     }
 
+    @GetMapping("/images")
+    public ResponseEntity<?> getAllProductImages() {
+        List<ProductImageResponse> productImageResponses = productImageRestService.getAllProductImages();
+        return ResponseEntity.ok(productImageResponses);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") int id) {
         try {
@@ -132,15 +128,59 @@ public class ProductRestController {
         }
     }
 
+    //Get image by product
+    @GetMapping("/images/")
+    public ResponseEntity<?> getProductImage(@RequestParam("productId") int id) {
+        try {
+            Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
+            List<ProductImage> productImages = productImageRepository.findByProduct(product);
+            List<ProductImageResponse> productImageResponses = productImages
+                    .stream()
+                    .map(ProductImageResponse::of)
+                    .toList();
+            return ResponseEntity.ok().body(productImageResponses);
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/images/{id}")
+    public ResponseEntity<?> getProductImageById(@PathVariable("id") int id) {
+        try {
+            return ResponseEntity.ok().body(productImageRestService.getProductImageById(id));
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @Valid @RequestBody ProductDTO productDTO) {
-        return ResponseEntity.ok(productService.updateProduct(id, productDTO));
+        try {
+            return ResponseEntity.ok(productService.updateProduct(id, productDTO));
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/images/{id}")
+    public ResponseEntity<?> updateProductImage(@PathVariable("id") int id, @ModelAttribute ProductImageDTO productImageDTO) {
+        try {
+            return ResponseEntity.ok(productImageRestService.updateProductImage(id, productImageDTO));
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") int id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Successfully deleted a product with id: " + id);
+    }
+
+    @DeleteMapping("/images/{id}")
+    public ResponseEntity<?> deleteProductImage(@PathVariable("id") int id) {
+        productImageRepository.deleteById(id);
+        return ResponseEntity.ok("Successfully deleted a product image with id: " + id);
     }
 
 }
