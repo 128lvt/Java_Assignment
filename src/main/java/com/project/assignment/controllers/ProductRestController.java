@@ -6,6 +6,7 @@ import com.project.assignment.models.Product;
 import com.project.assignment.models.ProductImage;
 import com.project.assignment.repositories.ProductImageRepository;
 import com.project.assignment.repositories.ProductRepository;
+import com.project.assignment.responses.ListProductResponse;
 import com.project.assignment.responses.ProductImageResponse;
 import com.project.assignment.responses.ProductResponse;
 import com.project.assignment.services.product.ProductRestService;
@@ -30,12 +31,14 @@ import static com.project.assignment.utilities.FileUploader.storeFile;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RequiredArgsConstructor
 public class ProductRestController {
     private final ProductRestService productService;
     private final ProductImageRestService productImageRestService;
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
+    private final ProductRestService productRestService;
 
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
@@ -101,15 +104,22 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllProducts(@RequestParam("page") int page) {
-        int size = 12;
-        PageRequest pageRequest = PageRequest.of(page, size);
+    public ResponseEntity<?> getAllProducts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        PageRequest pageRequest = PageRequest.of(page, limit);
         List<Product> products = productService.getAllProducts(pageRequest).getContent();
         //Convert sang productresponse
+        int totalPages = productRestService.getAllProducts(pageRequest).getTotalPages();
+        int totalElements = (int) productRestService.getAllProducts(pageRequest).getTotalElements();
 
         List<ProductResponse> productResponses = productService.productResponseList(products);
 
-        return ResponseEntity.ok(productResponses);
+
+        return ResponseEntity.ok().body(ListProductResponse
+                .builder()
+                .products(productResponses)
+                .totalPages(totalPages)
+                .totalItems(totalElements)
+                .build());
     }
 
     @GetMapping("/images")
