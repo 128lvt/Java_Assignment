@@ -50,7 +50,8 @@ public class ProductRestController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessage);
             }
-            return ResponseEntity.ok("Successfully created a product " + productService.createProduct(productDTO));
+            productRestService.createProduct(productDTO);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -184,7 +185,7 @@ public class ProductRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") int id) {
         productService.deleteProduct(id);
-        return ResponseEntity.ok("Successfully deleted a product with id: " + id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/images/{id}")

@@ -1,5 +1,6 @@
 package com.project.assignment.responses;
 
+import com.project.assignment.models.Category;
 import lombok.*;
 
 @Getter
@@ -8,6 +9,14 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CategoryResponse {
-    private String categoryName;
     private Integer categoryId;
+    private String categoryName;
+
+    public static CategoryResponse of(Category category) {
+        return CategoryResponse
+                .builder()
+                .categoryId(category.getId())
+                .categoryName(category.getName())
+                .build();
+    }
 }

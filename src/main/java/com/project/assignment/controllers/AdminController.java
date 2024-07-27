@@ -11,4 +11,9 @@ public class AdminController {
     public String showAdminDashboard() {
         return "dashboard/layout-admin";
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "/admin/crud-product";
+    }
 }
