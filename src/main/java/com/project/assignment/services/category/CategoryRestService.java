@@ -17,8 +17,12 @@ public class CategoryRestService implements ICategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Category createCategory(CategoryDTO categoryDTo) {
-        return null;
+    public CategoryResponse createCategory(CategoryDTO categoryDTO) {
+        Category category = Category
+                .builder()
+                .name(categoryDTO.getName())
+                .build();
+        return CategoryResponse.of(categoryRepository.save(category));
     }
 
     @Override
@@ -34,12 +38,17 @@ public class CategoryRestService implements ICategoryService {
     }
 
     @Override
-    public CategoryResponse updateCategory(CategoryDTO categoryDTo) {
-        return null;
+    public CategoryResponse updateCategory(int id, CategoryDTO categoryDTO) throws NotFoundException {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category not found"));
+
+        category.setName(categoryDTO.getName());
+        categoryRepository.save(category);
+        return CategoryResponse.of(category);
     }
 
     @Override
-    public void deleteCategory(int id) {
-
+    public void deleteCategory(int id) throws NotFoundException {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category not found"));
+        categoryRepository.deleteById(id);
     }
 }
