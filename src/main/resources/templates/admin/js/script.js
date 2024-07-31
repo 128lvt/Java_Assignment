@@ -12,9 +12,17 @@ app.controller("MainController", function ($scope, $http) {
 
   $scope.newProduct = {};
 
+  $scope.files = {};
+
+  $scope.handleFiles = function (files) {
+    $scope.files = files; // Lưu trữ các tệp đã chọn
+    console.log("Selected files:", $scope.files);
+  };
+
   $scope.createProduct = function () {
     console.log($scope.newProduct);
     // Gửi yêu cầu POST với dữ liệu sản phẩm dưới dạng JSON
+    console.log($scope.files);
     $http
       .post(API_PREFIX + "products", $scope.newProduct, {
         headers: {
@@ -22,6 +30,24 @@ app.controller("MainController", function ($scope, $http) {
         },
       })
       .then(function (response) {
+        var productId = response.data.id;
+
+        var formData = new FormData();
+
+        if ($scope.files && $scope.files.length > 0) {
+          angular.forEach($scope.files, function (file) {
+            formData.append("files", file);
+          });
+        } else {
+          console.log("No files selected");
+        }
+
+        $http.post(API_PREFIX + "products/uploads/" + productId, formData, {
+          headers: {
+            "Content-Type": undefined,
+          }
+        });
+
         // Hiển thị thông điệp thành công
         alert("Product added successfully");
         // Đóng modal
@@ -30,6 +56,7 @@ app.controller("MainController", function ($scope, $http) {
         $scope.getProducts($scope.currentPage);
         // Đặt lại đối tượng sản phẩm mới để làm sạch form
         $scope.newProduct = {};
+        $scope.files = {};
       })
       .catch(function (error) {
         console.error("Error adding product:", error);

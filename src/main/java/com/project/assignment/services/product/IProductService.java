@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 public interface IProductService {
-    Product createProduct(ProductDTO productDTO) throws NotFoundException;
+    ProductResponse createProduct(ProductDTO productDTO) throws NotFoundException;
 
 /*    ProductImage createProductImage(int productId, ProductImageDTO productImageDTO);*/
 

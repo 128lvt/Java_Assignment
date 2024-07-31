@@ -29,7 +29,7 @@ public class ProductRestService implements IProductService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Product createProduct(ProductDTO productDTO) throws NotFoundException {
+    public ProductResponse createProduct(ProductDTO productDTO) throws NotFoundException {
         Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new NotFoundException("Category not found"));
         Product product = Product
                 .builder()
@@ -39,7 +39,10 @@ public class ProductRestService implements IProductService {
                 .category(category)
                 .createDate(LocalDate.now())
                 .build();
-        return productRepository.save(product);
+        return ProductResponse
+                .builder()
+                .id(productRepository.save(product).getId())
+                .build();
     }
 
     /*@Override

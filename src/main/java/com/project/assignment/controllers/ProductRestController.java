@@ -50,8 +50,8 @@ public class ProductRestController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessage);
             }
-            productRestService.createProduct(productDTO);
-            return ResponseEntity.ok().build();
+
+            return ResponseEntity.ok().body(productRestService.createProduct(productDTO));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

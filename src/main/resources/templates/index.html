@@ -129,7 +129,9 @@
               <div class="product__item">
                 <div
                         class="product__item__pic set-bg"
-                        th:attr="data-setbg=@{'/uploads/product_images/' + ${product.productImages[0].url}}"
+                        th:attr="data-setbg=@{${product.productImages != null and #lists.size(product.productImages) > 0
+                        ? '/uploads/product_images/' + product.productImages[0].url
+                        : '/uploads/product_images/default_image.jpg'}}"
                 >
                   <span class="label">New</span>
                   <ul class="product__hover">
