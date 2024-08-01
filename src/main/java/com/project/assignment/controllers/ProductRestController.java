@@ -174,10 +174,37 @@ public class ProductRestController {
     }
 
     @PutMapping("/images/{id}")
-    public ResponseEntity<?> updateProductImage(@PathVariable("id") int id, @ModelAttribute ProductImageDTO productImageDTO) {
+    public ResponseEntity<?> updateProductImage(@PathVariable("id") int id, List<MultipartFile> files) {
         try {
-            return ResponseEntity.ok(productImageRestService.updateProductImage(id, productImageDTO));
-        } catch (NotFoundException e) {
+            //Nếu không có files thì tạo mảng rỗng
+            files = files == null ? new ArrayList<>() : files;
+            if (files.size() > 1) {
+                return ResponseEntity.badRequest().body("Failed");
+            }
+            List<ProductImage> productImages = new ArrayList<>();
+            String fileName = null;
+            for (MultipartFile file : files) {
+                if (file != null && !file.isEmpty()) {
+                    if (file.getSize() == 0) {
+                        continue;
+                    }
+                    // Kiểm tra kích thước file
+                    if (file.getSize() > 10 * 1024 * 1024) {
+                        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File is too large! Maximum size is 10MB");
+                    }
+
+                    // Kiểm tra định dạng
+                    String contentType = file.getContentType();
+                    if (contentType == null || !contentType.startsWith("image/")) {
+                        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image");
+                    }
+                    //Lưu file và cập nhật thumbnail trong DTO
+                    fileName = storeFile(file, "product_images");
+                }
+            }
+
+            return ResponseEntity.ok().body(productImageRestService.updateProductImage(id, fileName));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

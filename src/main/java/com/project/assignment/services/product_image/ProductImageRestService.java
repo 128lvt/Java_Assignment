@@ -61,9 +61,9 @@ public class ProductImageRestService implements IProductImage {
     }
 
     @Override
-    public ProductImageResponse updateProductImage(int id, ProductImageDTO productImageDTO) throws NotFoundException {
+    public ProductImageResponse updateProductImage(int id, String fileName) throws NotFoundException {
         ProductImage productImage = productImageRepository.findById(id).orElseThrow(() -> new NotFoundException("ProductImage not found"));
-        productImage.setUrl(productImageDTO.getUrl());
+        productImage.setUrl(fileName);
         productImageRepository.save(productImage);
         return ProductImageResponse.of(productImage);
     }

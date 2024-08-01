@@ -45,7 +45,7 @@ app.controller("MainController", function ($scope, $http) {
         $http.post(API_PREFIX + "products/uploads/" + productId, formData, {
           headers: {
             "Content-Type": undefined,
-          }
+          },
         });
 
         // Hiển thị thông điệp thành công
@@ -118,6 +118,8 @@ app.controller("MainController", function ($scope, $http) {
         category_id: $scope.selectedProduct.category.categoryId,
       };
 
+      var formData = new FormData();
+
       $http({
         method: "PUT",
         url: API_PREFIX + "products/" + $scope.selectedProduct.id,
@@ -125,6 +127,23 @@ app.controller("MainController", function ($scope, $http) {
         headers: { "Content-Type": "application/json" },
       })
         .then(function (response) {
+          if ($scope.files && $scope.files.length > 0) {
+            angular.forEach($scope.files, function (file) {
+              formData.append("files", file);
+            });
+          } else {
+            console.log("No files selected");
+          }
+
+          $http.post(
+            API_PREFIX + "products/uploads/" + $scope.selectedProduct.id,
+            formData,
+            {
+              headers: {
+                "Content-Type": undefined,
+              },
+            }
+          );
           alert("Product updated successfully");
           $scope.getProducts(0); // Refresh the product list
           $("#editProductModal").modal("hide");
@@ -158,3 +177,100 @@ app.controller("MainController", function ($scope, $http) {
     }
   };
 });
+
+app.controller("ImageController", [
+  "$scope",
+  "$location",
+  "$http",
+  function ($scope, $location, $http) {
+    // Hàm để lấy productId từ URL
+    $scope.getProductId = function () {
+      const params = new URLSearchParams($location.absUrl().split("?")[1]);
+      $scope.productId = params.get("productId");
+    };
+
+    // Gọi hàm để lấy productId
+    $scope.getProductId();
+
+    $scope.file = null;
+
+    $scope.handleFile = function (element) {
+      $scope.$apply(() => {
+        // Sử dụng $apply để cập nhật ngữ cảnh
+        $scope.file = element.files[0]; // Lưu tệp đầu tiên vào biến
+        console.log("Selected file:", $scope.file);
+      });
+    };
+
+    const dropArea = document.querySelector(".drop-area");
+
+    dropArea.addEventListener("drop", (event) => {
+      event.preventDefault(); // Prevent default behavior of browser
+      const file = event.dataTransfer.files[0]; // Get the file that was dropped
+      $scope.file = file;
+    });
+
+    $scope.images = [];
+    $scope.selectedImage = null;
+
+    // Hàm tải hình ảnh theo productId
+    $scope.loadImages = function () {
+      if ($scope.productId) {
+        // Kiểm tra xem productId có tồn tại
+        $http
+          .get(API_PREFIX + "products/images/?productId=" + $scope.productId)
+          .then(function (response) {
+            $scope.images = response.data;
+          })
+          .catch(function (error) {
+            console.error("Lỗi khi tải hình ảnh:", error); // Xử lý lỗi
+          });
+      } else {
+        console.log("productId không tồn tại.");
+      }
+    };
+
+    $scope.openEditModal = function (id) {
+      $scope.selectedImage = $scope.images.find(
+        (image) => image.productImageId === id
+      );
+      // console.log($scope.images)
+      // console.log($scope.selectedImage);
+      $("#editModal").modal("show");
+    };
+
+    $scope.updateImage = function () {
+      if (!$scope.file) {
+        alert("Please select an image");
+        return;
+      }
+      var formData = new FormData();
+      formData.append("files", $scope.file);
+      if ($scope.selectedImage) {
+        $http
+          .put(
+            API_PREFIX +
+              "products/images/" +
+              $scope.selectedImage.productImageId,
+            formData,
+            {
+              headers: {
+                "Content-Type": undefined,
+              },
+            }
+          )
+          .then(function (response) {
+            alert("Image updated successfully");
+            $scope.loadImages();
+            $("#editModal").modal("hide");
+          })
+          .catch(function (error) {
+            console.error("Error updating image:", error);
+          });
+      }
+    };
+
+    // Gọi hàm tải hình ảnh
+    $scope.loadImages();
+  },
+]);
