@@ -17,7 +17,7 @@ public interface IProductImage {
 
     ProductImageResponse getProductImageById(int id) throws NotFoundException;
 
-    ProductImageResponse updateProductImage(int id, ProductImageDTO productImageDTO) throws NotFoundException;
+    ProductImageResponse updateProductImage(int id, String fileName) throws NotFoundException;
 
     void deleteProductImageById(int id);
 }

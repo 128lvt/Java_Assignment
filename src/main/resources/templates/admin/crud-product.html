@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bootstrap CRUD Data Table for Database with Modal Form</title>
+  <title>Admin Dashboard</title>
 
   <!-- lib -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" />
@@ -78,14 +78,10 @@
         <div class="hint-text">Showing <b>{{products.length}}</b> out of <b>{{totalProducts}}</b> products</div>
         <ul class="pagination">
           <li class="page-item" ng-class="{'disabled': currentPage === 0}">
-            <a href="#" ng-click="getProducts(currentPage - 1)">Previous</a>
-          </li>
-          <li class="page-item" ng-repeat="page in getPageNumbers() track by $index"
-            ng-class="{'active': isActivePage($index)}">
-            <a href="#" ng-click="getProducts($index)" class="page-link">{{$index + 1}}</a>
+            <a href="#" ng-click="currentPage > 0 && getProducts(currentPage - 1)">Previous</a>
           </li>
           <li class="page-item" ng-class="{'disabled': currentPage === totalPages - 1}">
-            <a href="#" ng-click="getProducts(currentPage + 1)">Next</a>
+            <a href="#" ng-click="currentPage < (totalPages - 1) && getProducts(currentPage + 1)">Next</a>
           </li>
         </ul>
       </div>
@@ -124,7 +120,7 @@
             <div class="form-group">
               <label for="editImages">Images (Upload multiple files)</label>
               <input type="file" class="form-control-file" id="uploadImages" multiple ng-model="files"
-              onchange="angular.element(this).scope().handleFiles(this.files)">
+                onchange="angular.element(this).scope().handleFiles(this.files)">
             </div>
           </div>
           <div class="modal-footer">
@@ -151,7 +147,7 @@
               <label for="editName">Name</label>
               <input type="text" class="form-control" id="editName" ng-model="selectedProduct.name" required />
             </div>
-            <div class="form-group">
+            <div class="form-group">`
               <label for="editPrice">Price</label>
               <input type="number" step="0.1" class="form-control" id="editPrice" ng-model="selectedProduct.price"
                 required />
@@ -169,8 +165,8 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="editImages">Images (Upload multiple files)</label>
-              <input type="file" class="form-control-file" id="editImages" multiple ngf-select ng-model="files" />
+              <label>Images</label>
+              <p><a href="edit-image.html?productId={{selectedProduct.id}}">Edit Images</a></p>
             </div>
           </div>
           <div class="modal-footer">
@@ -182,6 +178,32 @@
     </div>
   </div>
 
+
+  <div id="editImagesModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editImagesModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form id="editForm" ng-submit="" enctype="multipart/form-data">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Product</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group" ng-repeat="image in selectedProduct.images">
+              <div class='lol'>
+                <img class="img-preview" id="img-preview" src="" alt="">
+                <input id="editImages" type="file" accept='image/*' onchange="showImage()">
+            </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-info">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Delete Product Modal -->
   <div id="deleteProductModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel"
@@ -204,9 +226,7 @@
   </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.6.0/angular-file-upload.min.js"></script>
-<script src="js/script.js">
-
-</script>
+<script src="js/script.js"></script>
 
 
 </html>

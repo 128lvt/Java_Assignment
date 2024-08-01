@@ -3,13 +3,13 @@ create database onlineshop;
 use onlineshop;
 
 CREATE TABLE categories (
-    id int IDENTITY NOT NULL,
+    id INT IDENTITY(1000, 1) NOT NULL,
     [name] varchar(100) NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE order_details (
-    id int IDENTITY NOT NULL,
+    id INT IDENTITY(1000, 1) NOT NULL,
     number_of_product int NULL,
     price float NULL,
     product_id int NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE order_details (
 );
 
 CREATE TABLE orders (
-    id int IDENTITY NOT NULL,
+    id INT IDENTITY(1000, 1) NOT NULL,
     order_date date NULL,
     total_money float NULL,
     [user_id] int NOT NULL,
@@ -26,14 +26,14 @@ CREATE TABLE orders (
 );
 
 CREATE TABLE product_img (
-    id int IDENTITY NOT NULL,
+    id INT IDENTITY(1000, 1) NOT NULL,
     img_url varchar(300) NULL,
     product_id int NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE products (
-    id int IDENTITY NOT NULL,
+    id INT IDENTITY(1000, 1) NOT NULL,
     [name] varchar(350) NULL,
     price float NULL,
     [description] varchar(300) NULL,
@@ -44,7 +44,7 @@ CREATE TABLE products (
 );
 
 CREATE TABLE users (
-    id int IDENTITY NOT NULL,
+    id INT IDENTITY(1000, 1) NOT NULL,
     fullname varchar(100) NULL,
     phone_number varchar(20) NULL,
     [address] varchar(100) NULL,
