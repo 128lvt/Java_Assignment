@@ -60,7 +60,7 @@
             <td>{{product.description}}</td>
             <td>{{product.category.categoryId}}</td>
             <td>{{product.category.categoryName}}</td>
-            <td>{{ product.images.length > 0 ? product.images[0].url : 'No images available' }}</td>
+            <td>{{ product.images.length }}</td>
             <td>{{product.createDate}}</td>
             <td>{{product.updateDate || 'Not updated'}}</td>
             <td>
@@ -166,7 +166,7 @@
             </div>
             <div class="form-group">
               <label>Images</label>
-              <p><a href="edit-image.html?productId={{selectedProduct.id}}">Edit Images</a></p>
+              <p><a href="products/edit-image?productId={{selectedProduct.id}}">Edit Images</a></p>
             </div>
           </div>
           <div class="modal-footer">
@@ -178,32 +178,6 @@
     </div>
   </div>
 
-
-  <div id="editImagesModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editImagesModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <form id="editForm" ng-submit="" enctype="multipart/form-data">
-          <div class="modal-header">
-            <h4 class="modal-title">Edit Product</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group" ng-repeat="image in selectedProduct.images">
-              <div class='lol'>
-                <img class="img-preview" id="img-preview" src="" alt="">
-                <input id="editImages" type="file" accept='image/*' onchange="showImage()">
-            </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-info">Save</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 
   <!-- Delete Product Modal -->
   <div id="deleteProductModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel"
@@ -226,7 +200,7 @@
   </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.6.0/angular-file-upload.min.js"></script>
-<script src="js/script.js"></script>
+<script th:src="@{/js/script.js}"></script>
 
 
 </html>
