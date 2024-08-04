@@ -9,9 +9,9 @@ spring:
     resources:
       static-locations: file:src/main/resources/static/
   datasource:
-    url: jdbc:sqlserver://localhost:1433;DatabaseName=onlineshop;encrypt=true;trustServerCertificate=true;
+    url: jdbc:sqlserver://localhost:1433;DatabaseName=onlineshop_java6;encrypt=true;trustServerCertificate=true;
     username: sa
-    password: P@ssw0rd
+    password: sa123456
   jpa:
     hibernate:
       ddl-auto: none

@@ -31,8 +31,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/dash-board/**").hasAnyAuthority("true")
-                        .requestMatchers(HttpMethod.POST, "/dash-board/**").hasAnyAuthority("true")
+                        .requestMatchers(HttpMethod.GET, "/dash-board/**").hasAuthority("true")
+                        .requestMatchers(HttpMethod.POST, "/dash-board/**").hasAuthority("true")
+                        .requestMatchers(HttpMethod.GET, "/admin/**").hasAuthority("true")
+                        .requestMatchers(HttpMethod.POST,"/admin/**").hasAuthority("true")
                         .requestMatchers(HttpMethod.GET, "/order").authenticated()
                         .anyRequest().permitAll()
                 )
