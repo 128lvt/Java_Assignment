@@ -2,6 +2,96 @@ var app = angular.module("myApp", []);
 var API_PREFIX = "http://localhost:8080/api/v1/";
 var LIMIT_PAGE = 15;
 
+app.controller("CategoryController", function ($scope, $http) {
+  $scope.categories = [];
+
+  $scope.createCategory = function () {
+    $http
+      .post(API_PREFIX + "categories", $scope.newCategory, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        $scope.getCategories();
+        $("#addProductModal").modal("hide");
+      })
+      .catch(function (error) {
+        console.error("Error creating category:", error);
+      });
+  };
+
+  $scope.getCategories = function () {
+    $http
+      .get(API_PREFIX + "categories")
+      .then(function (response) {
+        $scope.categories = response.data;
+      })
+      .catch(function (error) {
+        console.error("Error fetching categories:", error);
+      });
+  };
+  // Khởi tạo bằng cách lấy danh mục
+  $scope.getCategories();
+
+  $scope.openEditModal = function (categoryId) {
+    $scope.selectedCategory = $scope.categories.find(
+      (c) => c.categoryId === categoryId
+    );
+    console.log($scope.selectedCategory);
+    $("#editProductModal").modal("show");
+  };
+
+  $scope.updateCategory = function () {
+    if ($scope.selectedCategory) {
+      // Tạo đối tượng category với thông tin từ newCategory
+      var category = {
+        name: $scope.selectedCategory.categoryName, // Sử dụng newCategory để gửi thông tin
+      };
+      console.log("Updating category with data:", category);
+
+      $http
+        .put(
+          API_PREFIX + "categories/" + $scope.selectedCategory.categoryId,
+          category,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+        .then(function (response) {
+          // Tải lại danh sách danh mục
+          $scope.getCategories();
+
+          // Đóng modal
+          $("#editProductModal").modal("hide");
+        })
+        .catch(function (error) {
+          console.error("Error updating category:", error);
+        });
+    }
+  };
+
+  $scope.openDeleteModal = function (categoryId) {
+    $scope.categoryId = categoryId;
+    $("#deleteProductModal").modal("show");
+    console.log(categoryId);
+  };
+
+  $scope.deleteCategory = function () {
+    if ($scope.categoryId) {
+      $http
+        .delete(API_PREFIX + "categories/" + $scope.categoryId)
+        .then(function (response) {
+          $scope.getCategories();
+          $("#deleteProductModal").modal("hide");
+        })
+        .catch(function (error) {
+          console.error("Error deleting category:", error);
+        });
+    }
+  };
+});
+
 app.controller("MainController", function ($scope, $http) {
   $scope.products = [];
   $scope.currentPage = 0;
@@ -213,6 +303,43 @@ app.controller("ImageController", [
     $scope.images = [];
     $scope.selectedImage = null;
 
+    $scope.handleFiles = function (files) {
+      $scope.files = files; // Lưu trữ các tệp đã chọn
+      console.log("Selected files:", $scope.files);
+    };
+
+    $scope.uploadImage = function () {
+      if ($scope.files) {
+        var formData = new FormData();
+
+        angular.forEach($scope.files, function (file) {
+          formData.append("files", file);
+        });
+
+        $http
+          .post(API_PREFIX + "products/uploads/" + $scope.productId, formData, {
+            headers: {
+              "Content-Type": undefined,
+            },
+            transformRequest: angular.identity,
+          })
+          .then(function (response) {
+            alert("Images uploaded successfully");
+            $scope.loadImages();
+          })
+          .catch(function (error) {
+            console.error("Error uploading images:", error.data.message);
+            if (error.data && error.data.message) {
+              alert("Error uploading images: " + error.data.message);
+            } else {
+              alert("Error uploading images: An unknown error occurred.");
+            }
+          });
+      } else {
+        alert("Please select images");
+      }
+    };
+
     // Hàm tải hình ảnh theo productId
     $scope.loadImages = function () {
       if ($scope.productId) {
@@ -266,6 +393,27 @@ app.controller("ImageController", [
           })
           .catch(function (error) {
             console.error("Error updating image:", error);
+          });
+      }
+    };
+
+    $scope.openDeleteModal = function (id) {
+      console.log(id);
+      $scope.imageId = id;
+      $("#deleteProductModal").modal("show");
+    };
+
+    $scope.deleteImage = function () {
+      if ($scope.imageId) {
+        $http
+          .delete(API_PREFIX + "products/images/" + $scope.imageId)
+          .then(function (response) {
+            alert("Image deleted successfully");
+            $scope.loadImages();
+            $("#deleteProductModal").modal("hide");
+          })
+          .catch(function (error) {
+            console.error("Error deleting image:", error.data.message);
           });
       }
     };

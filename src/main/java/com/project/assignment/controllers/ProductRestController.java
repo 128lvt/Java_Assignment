@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,6 +82,11 @@ public class ProductRestController {
                     String contentType = file.getContentType();
                     if (contentType == null || !contentType.startsWith("image/")) {
                         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image");
+                    }
+
+                    int size = productImageRepository.findByProduct(product).size();
+                    if (size >= ProductImage.MAXIMUM_IMAGE_PER_PRODUCT) {
+                        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Maximum size is " + ProductImage.MAXIMUM_IMAGE_PER_PRODUCT + " images"));
                     }
                     //Lưu file và cập nhật thumbnail trong DTO
                     String fileName = storeFile(file, "product_images");
@@ -218,7 +224,7 @@ public class ProductRestController {
     @DeleteMapping("/images/{id}")
     public ResponseEntity<?> deleteProductImage(@PathVariable("id") int id) {
         productImageRepository.deleteById(id);
-        return ResponseEntity.ok("Successfully deleted a product image with id: " + id);
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Product image deleted"));
     }
 
 }
